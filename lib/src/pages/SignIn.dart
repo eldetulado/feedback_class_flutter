@@ -131,7 +131,6 @@ class _SignInState extends State<SignIn> {
                     ktext: 'INGRESAR',
                     kstyle: ktextbtnSingIn,
                     presionar: () {
-                     
                       // if (_username.isEmpty || _password.isEmpty) {
                       //   Toast.show("Complete todos los campos", context,
                       //       duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
@@ -180,6 +179,7 @@ class _SignInState extends State<SignIn> {
       ],
     );
   }
+
   CupertinoAlertDialog _alertDialog2(String email) {
     return CupertinoAlertDialog(
       insetAnimationCurve: Curves.elasticIn,

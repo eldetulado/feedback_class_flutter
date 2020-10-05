@@ -1,8 +1,10 @@
 import 'package:assets_img/src/pages/Constant.dart';
+import 'package:assets_img/src/providers/db_provider.dart';
 import 'package:assets_img/src/widgets/LogIn/button.dart';
 import 'package:assets_img/src/widgets/SignUp/headerWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:toast/toast.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -14,6 +16,12 @@ class _SignUpState extends State<SignUp> {
   Widget espacio = SizedBox(height: 20.0);
   bool vstate = true;
   bool vstate2 = true;
+
+  TextEditingController _controllerName = TextEditingController();
+  TextEditingController _controllerEmail = TextEditingController();
+  TextEditingController _controllerPass = TextEditingController();
+  TextEditingController _controllerConfirmPass = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,13 +51,21 @@ class _SignUpState extends State<SignUp> {
                       kcolor: Color(0XFF6C63FF),
                       ktext: 'Register',
                       kstyle: ktextbtnSingIn,
-                      presionar: () {
-                        Navigator.pushNamed(context, '/');
+                      presionar: () async {
+                        final resp = await DBProvider.db.createNewUser(
+                          UserModel(
+                            name: _controllerName.text.trim(),
+                            email: _controllerEmail.text.trim(),
+                            pass: _controllerConfirmPass.text.trim(),
+                          ),
+                        );
+                        resp != -1
+                            ? Navigator.pushNamed(context, '/')
+                            : Toast.show("Este correo ya existe", context);
                       },
                     ),
                   ],
-              )
-            )
+                ))
           ],
         ),
         Container(
@@ -63,6 +79,7 @@ class _SignUpState extends State<SignUp> {
 
   Widget _inputName() {
     return TextField(
+      controller: _controllerName,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         labelStyle: TextStyle(color: Color(0xff6C63FF)),
@@ -83,6 +100,7 @@ class _SignUpState extends State<SignUp> {
 
   Widget _inputEmail() {
     return TextField(
+      controller: _controllerEmail,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         labelStyle: TextStyle(color: Color(0xff6C63FF)),
@@ -103,6 +121,7 @@ class _SignUpState extends State<SignUp> {
 
   Widget _inputPass() {
     return TextField(
+      controller: _controllerPass,
       cursorColor: Color(0xff6C63FF),
       decoration: InputDecoration(
           labelStyle: TextStyle(color: Color(0xff6C63FF)),
@@ -133,9 +152,10 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-Widget _inputConfirmPass() {
+  Widget _inputConfirmPass() {
     Color kColor = Color(0xff6C63FF);
     return TextField(
+      controller: _controllerConfirmPass,
       cursorColor: kColor,
       decoration: InputDecoration(
           labelStyle: TextStyle(color: kColor),
@@ -159,10 +179,9 @@ Widget _inputConfirmPass() {
               });
             },
             icon: vstate2
-                    ? Icon(Icons.visibility_off, color: Color(0xff6C63FF))
-                    : Icon(Icons.visibility, color: Color(0xff6C63FF)),
-          )
-      ),
+                ? Icon(Icons.visibility_off, color: Color(0xff6C63FF))
+                : Icon(Icons.visibility, color: Color(0xff6C63FF)),
+          )),
       obscureText: vstate2,
     );
   }

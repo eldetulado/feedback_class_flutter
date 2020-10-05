@@ -19,7 +19,7 @@ class UserModel {
     );
 
     Map<String, dynamic> toJson() => {
-        "id": id,
+      // NO SE DEBERIA MANDAR EL ID, ESTE DEBE SER AUTOGENERADO
         "name": name,
         "email": email,
         "pass": pass,
